@@ -1,4 +1,5 @@
 package main;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -13,7 +14,7 @@ public class LinearProbingHashTable<K, V> implements GradableMap<K, V> {
 	@SuppressWarnings("unchecked")
 	public LinearProbingHashTable(){
 		// TODO Auto-generated method stub
-		this.data = (HashTableEntry<K, V>[]) new Object[DEFAULT_LENGTH];
+		this.data = new HashTableEntry[DEFAULT_LENGTH];
 		this.size = 0;
 		this.maxLoad = DEFAULT_MAXLOAD;
 	}
@@ -21,7 +22,7 @@ public class LinearProbingHashTable<K, V> implements GradableMap<K, V> {
 	@SuppressWarnings("unchecked")
 	public LinearProbingHashTable(int size){
 		this();
-		this.data = (HashTableEntry<K, V>[]) new Object[size];
+		this.data = new HashTableEntry[size];
 		this.size = size;
 		
 		
@@ -90,9 +91,17 @@ public class LinearProbingHashTable<K, V> implements GradableMap<K, V> {
 	public V put(K key, V value) throws NullPointerException {
 		// TODO Auto-generated method stub
 		try {
-			if(key == null) {
+			if(key == null) { //if key is null, throw exception
 				throw new NullPointerException("Key is null");
 			}
+			//if key is not null and was not previously in
+			//add key. 
+			HashTableEntry<K,V> newEntry = new HashTableEntry(key,value);
+			int hashedKey = key.hashCode() % data.length;
+	
+			System.out.println("hey");
+			data[hashedKey] = newEntry;
+			
 			
 		}catch(NullPointerException e) {
 			e.printStackTrace();
@@ -126,12 +135,19 @@ public class LinearProbingHashTable<K, V> implements GradableMap<K, V> {
 	@Override
 	public Collection<V> values() {
 		// TODO Auto-generated method stub
-		return null;
+		ArrayList<V> allValues = new ArrayList<>();
+		for(int i = 0; i < data.length; i++) {
+			if(data[i] != null && data[i].getValue() != null) {
+				allValues.add(data[i].getValue());
+			}
+		}
+		return allValues;
 	}
 
 	@Override
 	public HashTableEntry<K, V>[] getArray() {
 		// TODO Auto-generated method stub
+		
 		return data;
 	}
 
@@ -146,10 +162,16 @@ public class LinearProbingHashTable<K, V> implements GradableMap<K, V> {
 		this.size = size;
 		
 	}
+	public void run() {
+		for(int i = 0 ; i< data.length; i++) {
+			System.out.println(data[i]);
+		}
+	}
 	public static void main(String args[]) {
-		LinearProbingHashTable<String,Integer> how = new LinearProbingHashTable<>();
+	//	LinearProbingHashTable<String,Integer> how = new LinearProbingHashTable<>(6);
+	//	how.put("hey",5);
+	//	how.run();
 		
-	
 	}
 
 }
