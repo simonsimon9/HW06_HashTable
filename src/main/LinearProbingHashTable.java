@@ -10,32 +10,39 @@ public class LinearProbingHashTable<K, V> implements GradableMap<K, V> {
 	private HashTableEntry<K,V>[] data;
 	private int size;
 	private double maxLoad;
-	
-	@SuppressWarnings("unchecked")
+	/**
+	 * Default constructor that takes in no values. Sets the
+	 * capacity of array to 11, size to 0, maxload to .75
+	 */
 	public LinearProbingHashTable(){
-		// TODO Auto-generated method stub
-		this.data = new HashTableEntry[DEFAULT_LENGTH];
-		this.size = 0;
-		this.maxLoad = DEFAULT_MAXLOAD;
+		this(DEFAULT_LENGTH);
 	}
 	
-	@SuppressWarnings("unchecked")
-	public LinearProbingHashTable(int size){
-		this();
-		this.data = new HashTableEntry[size];
-		this.size = size;
-		
+	/**
+	 * Constructor that sets the capacity of array .
+	 * Max load is .75 and size is 0. 
+	 * @param capacity  the length of array
+	 */
+	public LinearProbingHashTable(int capacity){
+		this(capacity, DEFAULT_MAXLOAD);
 		
 	}
-
-	public LinearProbingHashTable(int size, double loadFactor){
-		this(size);
+	/**
+	 * Constructor that sets the capacity of array , and load factor
+	 * size is 0. 
+	 * @param capacity
+	 * @param loadFactor
+	 */
+	public LinearProbingHashTable(int capacity, double loadFactor){
+		this.data = new HashTableEntry[capacity];
+		this.size = 0;
 		this.maxLoad = loadFactor;
 	}
-	
+	/**
+	 * Method sets the size to 0 and the entries array to an empty array
+	 */
 	@Override
 	public void clear() {
-		// TODO Auto-generated method stub
 		this.size = 0;
 		for(int i = 0; i < data.length; i++) {
 			data[i]=null;
@@ -45,7 +52,7 @@ public class LinearProbingHashTable<K, V> implements GradableMap<K, V> {
 
 	@Override
 	public boolean containsKey(Object arg0) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub after put
 		K target = (K) arg0;
 		int targetHashcode = target.hashCode();
 		int targetLocation = targetHashcode % size;
@@ -56,10 +63,21 @@ public class LinearProbingHashTable<K, V> implements GradableMap<K, V> {
 		
 		return false;
 	}
-
+	
+	/**
+	 * Method iterates through the hash table for the value. 
+	 * @return returns true if value is found and returns false if values is not found.
+	 */
 	@Override
 	public boolean containsValue(Object arg0) {
-		// TODO Auto-generated method stub
+		for(int i = 0; i < data.length; i++) {
+			if(data[i] == null) {
+				continue;
+			}
+			if(data[i].getValue().equals(arg0)) {
+				return true;
+			}
+		}
 		return false;
 	}
 
@@ -94,13 +112,17 @@ public class LinearProbingHashTable<K, V> implements GradableMap<K, V> {
 			if(key == null) { //if key is null, throw exception
 				throw new NullPointerException("Key is null");
 			}
+			
+			
+			HashTableEntry<K,V> newEntry = new HashTableEntry(key,value);
+			int targetIndex = key.hashCode() % data.length;
+		
 			//if key is not null and was not previously in
 			//add key. 
-			HashTableEntry<K,V> newEntry = new HashTableEntry(key,value);
-			int hashedKey = key.hashCode() % data.length;
-	
-			System.out.println("hey");
-			data[hashedKey] = newEntry;
+				System.out.println("hey");
+				data[targetIndex] = newEntry;
+			
+			
 			
 			
 		}catch(NullPointerException e) {
@@ -145,15 +167,15 @@ public class LinearProbingHashTable<K, V> implements GradableMap<K, V> {
 	}
 
 	@Override
-	public HashTableEntry<K, V>[] getArray() {
-		// TODO Auto-generated method stub
-		
+	public HashTableEntry<K, V>[] getArray() {		
 		return data;
 	}
 
 	@Override
 	public void setArray(HashTableEntry<K, V>[] array) {
-		// TODO Auto-generated method stub
+		for(int i = 0; i < array.length; i++) {
+			data[i] = array[i];
+		}
 		
 	}
 
