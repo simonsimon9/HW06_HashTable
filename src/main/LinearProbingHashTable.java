@@ -126,6 +126,7 @@ public class LinearProbingHashTable<K, V> implements GradableMap<K, V> {
 	@Override
 	public V put(K key, V value) throws NullPointerException {
 		// TODO Auto-generated method stub
+		boolean returnValue = false;
 		try {
 			if(key == null) { //if key is null, throw exception
 				throw new NullPointerException("Key is null");
@@ -133,17 +134,10 @@ public class LinearProbingHashTable<K, V> implements GradableMap<K, V> {
 			
 			
 			HashTableEntry<K,V> newEntry = new HashTableEntry(key,value);
+			
 			int targetIndex = key.hashCode() % data.length;
-		
-			//if space is never touched. Just add the entry into this index. 
-			/*if(data[targetIndex] == null) { 
-				data[targetIndex] = newEntry;
-				this.size++;
-				return null;
-			}*/
 			
-			
-			int runner = targetIndex;
+			int runner = targetIndex == data.length - 1? 0: targetIndex;
 			runner++;
 			do {
 				
@@ -152,12 +146,28 @@ public class LinearProbingHashTable<K, V> implements GradableMap<K, V> {
 					this.size++;
 					break;
 				}
+				
+				if(data[runner].isAvailable()) {
+					data[runner] = newEntry;
+					data[runner].setAvailable(false);
+					this.size++;
+					break;
+				}
+				
+				if(data[runner].getKey().hashCode() == key.hashCode()) {
+					V oldvalue= data[runner].getValue();
+					data[runner] = newEntry;
+					returnValue = true;
+					break;
+				}
+				
 				runner = runner==data.length ?runner=0:runner+1;
 				
 			}while(targetIndex != runner);
 			
 			
 			double currentLoadFactor = (double)size / (double)data.length;
+			
 			if(currentLoadFactor > this.maxLoad) {
 				HashTableEntry<K,V>[] newArray = new HashTableEntry[2*data.length];
 				for(int i = 0; i < data.length; i++) {
@@ -174,8 +184,12 @@ public class LinearProbingHashTable<K, V> implements GradableMap<K, V> {
 		}
 		//if the key is not null and not previously in table. 
 		//add entry and return null
+		if(returnValue) {
+			return value;
+		}else {
+			return null;
+		}
 		
-		return value;
 	}
 
 	@Override

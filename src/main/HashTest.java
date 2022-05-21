@@ -2,14 +2,89 @@ package main;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.Map.Entry;
 
 import org.junit.jupiter.api.Test;
 
 class HashTest {
+	 //===================begin - V put(key, value)===================
+	@Test
+	void StringcheckPutCollisionSameHashCode() {
+		LinearProbingHashTable<String,String> hashTable = new LinearProbingHashTable<>(5);
+		hashTable.put("hi","wow");
+		hashTable.put("hi","no");
+		hashTable.put("hi","boy");
+		
+		assertEquals(hashTable.size(), 1);
+	}
 	
+	
+	@Test
+	void checkPutCollisionNotSameHashCode() {
+		LinearProbingHashTable<Integer,Integer> hashTable = new LinearProbingHashTable<>(5);
+		hashTable.put(1,0);
+		hashTable.put(11,1);
+		hashTable.put(21,2);
+		
+		assertEquals(hashTable.size(), 3);
+	}
+	
+	@Test
+	void checkPutCollisionSameHashCode() {
+		LinearProbingHashTable<Integer,Integer> hashTable = new LinearProbingHashTable<>(5);
+		hashTable.put(1,0);
+		hashTable.put(1,1);
+		hashTable.put(1,2);
+		hashTable.put(3,5);
+		hashTable.put(3,6);
+		hashTable.put(3,7);
+		assertEquals(hashTable.size(), 2);
+		assertEquals(hashTable.values().toArray()[0], 2);
+		assertEquals(hashTable.values().toArray()[1], 7);
+	}
+	@Test
+	void checkLoadFactorNoChangePut() {
+		LinearProbingHashTable<Integer,Integer> hashTable = new LinearProbingHashTable<>(5);
+		hashTable.put(1,0);
+		hashTable.put(1,1);
+		hashTable.put(1,2);
+		
+		assertEquals(hashTable.getArray().length, 5);
+	}
+	@Test
+	void checkLoadFactorChangePut() {
+		LinearProbingHashTable<Integer,Integer> hashTable = new LinearProbingHashTable<>(5);
+		hashTable.put(1,0);
+		hashTable.put(2,1);
+		hashTable.put(3,2);
+		hashTable.put(4,3);
+		
+		assertEquals(hashTable.getArray().length, 10);
+	}
+
+	
+    //====================end - V put(key, value)====================
+	@Test
+	void isEmptyTrue() {
+		LinearProbingHashTable<Integer,Integer> hashTable = new LinearProbingHashTable<>(5);
+		assertTrue(hashTable.isEmpty());
+	}
+	@Test
+	void isEmptyFalse() {
+		LinearProbingHashTable<Integer,Integer> hashTable = new LinearProbingHashTable<>(5);
+		hashTable.put(0,0);
+		hashTable.put(1,1);
+		hashTable.put(2,2);
+		
+		assertFalse(hashTable.isEmpty());
+	}
+    //===================end - boolean isEmpty()====================
+
     //===================begin - Set<Map.Entry<K,V>>entrySet()====================
 	@Test
 	void entrySetEquals() {
@@ -145,3 +220,5 @@ class HashTest {
 
 	
 }
+
+
