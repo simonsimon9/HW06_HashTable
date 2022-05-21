@@ -2,10 +2,42 @@ package main;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Map.Entry;
+
 import org.junit.jupiter.api.Test;
 
 class HashTest {
 	
+    //===================begin - Set<Map.Entry<K,V>>entrySet()====================
+	@Test
+	void entrySetEquals() {
+		LinearProbingHashTable<Integer,Integer> hashTable = new LinearProbingHashTable<>(5);
+		hashTable.put(0,0);
+		hashTable.put(1,1);
+		hashTable.put(2,2);
+		
+		HashTableEntry<Integer,Integer> data1 = new HashTableEntry<>(0,0);
+		HashTableEntry<Integer,Integer> data2 = new HashTableEntry<>(1,1);
+		HashTableEntry<Integer,Integer> data3 = new HashTableEntry<>(2,2);
+		Set<HashTableEntry<Integer, Integer>> set = new HashSet<>();
+		set.add(data1);
+		set.add(data2);
+		set.add(data3);
+		
+		System.out.println(hashTable.entrySet().toArray().length);
+		for(int i = 0 ; i< hashTable.size(); i++) {
+			assertEquals(hashTable.entrySet().toArray()[i], set.toArray()[i]);
+		}
+		assertEquals(hashTable.entrySet().size(), 3);
+		
+	}
+	
+    //===================end - Set<Map.Entry<K,V>>entrySet()====================
+
+    //===================begin - containsValue()====================
+
 	@Test 
 	void containsValueMethodTrue() {
 		LinearProbingHashTable<Integer,Integer> hashTable = new LinearProbingHashTable<>(5);
@@ -41,6 +73,9 @@ class HashTest {
 		assertFalse(hashTable.containsValue("no"));
 
 	}
+	
+    //===================end - containsValue()====================
+
     //===================begin - void clear() ====================
 
 	@Test 

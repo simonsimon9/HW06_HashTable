@@ -1,6 +1,7 @@
 package main;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -80,11 +81,22 @@ public class LinearProbingHashTable<K, V> implements GradableMap<K, V> {
 		}
 		return false;
 	}
-
+	/**
+	 * Method 
+	 */
 	@Override
 	public Set<Map.Entry<K, V>> entrySet() {
-		// TODO Auto-generated method stub
-		return null;
+		Set<Map.Entry<K, V>> set = new HashSet<>();
+		for(int i = 0; i < data.length; i++) {
+			if(data[i] == null) {
+				continue;
+			}
+			if(data[i] != null) {
+				set.add(data[i]);
+			
+			}
+		}
+		return set;
 	}
 
 	@Override
@@ -121,7 +133,7 @@ public class LinearProbingHashTable<K, V> implements GradableMap<K, V> {
 			//add key. 
 				System.out.println("hey");
 				data[targetIndex] = newEntry;
-			
+			size++;
 			
 			
 			
