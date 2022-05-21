@@ -82,7 +82,8 @@ public class LinearProbingHashTable<K, V> implements GradableMap<K, V> {
 		return false;
 	}
 	/**
-	 * Method 
+	 * Method adds all the hash table entries into set.
+	 * @return a set of hash table entries.
 	 */
 	@Override
 	public Set<Map.Entry<K, V>> entrySet() {
@@ -104,10 +105,15 @@ public class LinearProbingHashTable<K, V> implements GradableMap<K, V> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	/**
+	 *  Method checks if the hash table is empty
+	 *  @return boolean value representation if the table is empty. 
+	 */
 	@Override
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
+		if(size == 0) {
+			return true;
+		}
 		return false;
 	}
 
@@ -129,12 +135,36 @@ public class LinearProbingHashTable<K, V> implements GradableMap<K, V> {
 			HashTableEntry<K,V> newEntry = new HashTableEntry(key,value);
 			int targetIndex = key.hashCode() % data.length;
 		
-			//if key is not null and was not previously in
-			//add key. 
-				System.out.println("hey");
+			//if space is never touched. Just add the entry into this index. 
+			/*if(data[targetIndex] == null) { 
 				data[targetIndex] = newEntry;
-			size++;
+				this.size++;
+				return null;
+			}*/
 			
+			
+			int runner = targetIndex;
+			runner++;
+			do {
+				
+				if(data[runner] == null) { 
+					data[runner] = newEntry;
+					this.size++;
+					break;
+				}
+				runner = runner==data.length ?runner=0:runner+1;
+				
+			}while(targetIndex != runner);
+			
+			
+			double currentLoadFactor = (double)size / (double)data.length;
+			if(currentLoadFactor > this.maxLoad) {
+				HashTableEntry<K,V>[] newArray = new HashTableEntry[2*data.length];
+				for(int i = 0; i < data.length; i++) {
+					newArray[i] = data[i];
+				}
+				this.data = newArray;
+			}
 			
 			
 		}catch(NullPointerException e) {
@@ -153,19 +183,25 @@ public class LinearProbingHashTable<K, V> implements GradableMap<K, V> {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
 	public V remove(Object key) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	/**
+	 * Method that returns the number of entries in the hash table. 
+	 * @return integer representing the number of entries in the hash table. 
+	 */
 	@Override
 	public int size() {
 		// TODO Auto-generated method stub
 		return size;
 	}
-
+	/**
+	 * Returns a collection of all the values in the hash table
+	 * @return arrayList of values
+	 */
 	@Override
 	public Collection<V> values() {
 		// TODO Auto-generated method stub
@@ -198,7 +234,12 @@ public class LinearProbingHashTable<K, V> implements GradableMap<K, V> {
 	}
 	public void run() {
 		for(int i = 0 ; i< data.length; i++) {
-			System.out.println(data[i]);
+			if(data[i] != null) {
+				System.out.println("key: "+data[i].getKey() + " value:"+data[i].getValue());
+			}
+			if(data[i] == null) {
+				System.out.println("null space");
+			}
 		}
 	}
 	public static void main(String args[]) {
