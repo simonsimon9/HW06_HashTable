@@ -12,6 +12,68 @@ import java.util.Map.Entry;
 import org.junit.jupiter.api.Test;
 
 class HashTest {
+	
+	//===================begin -V remove(key)===================
+	@Test
+	void removedElementCheck() {
+		LinearProbingHashTable<Integer,Integer> hashTable = new LinearProbingHashTable<>(20);
+		hashTable.put(1,0);
+		hashTable.put(2,1);
+		hashTable.put(3,2);
+		hashTable.put(15, 3);
+		
+		hashTable.remove(1);
+		hashTable.remove(2);
+		
+		
+		assertFalse(hashTable.containsKey(1));
+		assertFalse(hashTable.containsKey(2));
+	
+		
+	}
+	
+
+	//===================end -V remove(key)===================
+
+	//===================begin -boolean containsKey(args0)===================
+	@Test
+	void containKeyTrue() {
+		LinearProbingHashTable<Integer,Integer> hashTable = new LinearProbingHashTable<>(20);
+		hashTable.put(1,0);
+		hashTable.put(2,1);
+		hashTable.put(3,2);
+		hashTable.put(15, 3);
+
+		assertTrue(hashTable.containsKey(15));
+		
+	}
+	@Test
+	void containKeyCollisionTrue() {
+		//TODO need to create remove first
+		LinearProbingHashTable<Integer,Integer> hashTable = new LinearProbingHashTable<>(20);
+		hashTable.put(1,0);
+		hashTable.put(2,1);
+		hashTable.put(3,2);
+		hashTable.put(15, 3);
+		hashTable.put(15, 4);
+
+		assertTrue(hashTable.containsKey(15));
+		
+	}
+	@Test
+	void containKeyFalse() {
+		//TODO need to create remove first
+		LinearProbingHashTable<Integer,Integer> hashTable = new LinearProbingHashTable<>(20);
+		hashTable.put(1,0);
+		hashTable.put(2,1);
+		
+
+		assertFalse(hashTable.containsKey(3));
+		
+	}
+	
+	//===================end - boolean containsKey(args0)===================
+
 	 //===================begin - V get(value)===================
 	@Test
 	void getMethodTestGet() {
