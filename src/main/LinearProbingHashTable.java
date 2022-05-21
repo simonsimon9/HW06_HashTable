@@ -101,8 +101,38 @@ public class LinearProbingHashTable<K, V> implements GradableMap<K, V> {
 	}
 
 	@Override
-	public V get(Object arg0) {
+	public V get(Object arg0) throws NullPointerException {
 		// TODO Auto-generated method stub
+		
+		try {
+			if(arg0==null) {
+				throw new NullPointerException("null key");
+			}
+			int targetIndex = arg0.hashCode() % data.length;
+			
+			
+			int runner = targetIndex == data.length - 1? 0: targetIndex;
+			
+			do {
+				if(data[targetIndex] == null) {
+					return null;
+				}
+				if(data[targetIndex].isAvailable()) {
+					continue;
+				}
+				if(data[targetIndex].getKey().hashCode() == arg0.hashCode()) {
+					System.out.println("get");
+					return data[targetIndex].getValue();
+				}
+				
+			
+			}while(data[targetIndex]!= null);
+		
+		}catch(NullPointerException e) {
+			e.printStackTrace();
+			System.out.println("Key is null");
+			return null;
+		}
 		return null;
 	}
 	/**
@@ -122,7 +152,16 @@ public class LinearProbingHashTable<K, V> implements GradableMap<K, V> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	/**
+	 * Method puts in the hash table entry into the table by hashing the key. 
+	 * The hashed key is then moduled by the length of array in order to 
+	 * determine the index.
+	 * 
+	 * Method takes in consideration of collisions and it performs linear
+	 * probing in order to find free space. 
+	 * 
+	 * @return the old value that is replaced or null if not replacing a number. 
+	 */
 	@Override
 	public V put(K key, V value) throws NullPointerException {
 		// TODO Auto-generated method stub
@@ -138,7 +177,7 @@ public class LinearProbingHashTable<K, V> implements GradableMap<K, V> {
 			int targetIndex = key.hashCode() % data.length;
 			
 			int runner = targetIndex == data.length - 1? 0: targetIndex;
-			runner++;
+			
 			do {
 				
 				if(data[runner] == null) { 

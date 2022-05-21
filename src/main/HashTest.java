@@ -12,6 +12,35 @@ import java.util.Map.Entry;
 import org.junit.jupiter.api.Test;
 
 class HashTest {
+	 //===================begin - V get(value)===================
+	@Test
+	void getMethodTestGet() {
+		LinearProbingHashTable<Integer,Integer> hashTable = new LinearProbingHashTable<>(20);
+		hashTable.put(1,0);
+		hashTable.put(2,1);
+		hashTable.put(3,2);
+		hashTable.put(15, 3);
+
+		assertEquals(hashTable.get(1), 0);
+		assertEquals(hashTable.get(2), 1);
+		assertEquals(hashTable.get(3), 2);
+		assertEquals(hashTable.get(15), 3);
+	}
+	@Test
+	void getMethodTestGetNull() {
+		LinearProbingHashTable<Integer,Integer> hashTable = new LinearProbingHashTable<>(100);
+		hashTable.put(1,0);
+		hashTable.put(2,1);
+		hashTable.put(3,2);
+		
+		assertEquals(hashTable.get(5), null);
+		assertEquals(hashTable.get(0), null);
+		assertEquals(hashTable.get(100), null);
+	}
+	
+	 //===================end - V get(value)===================
+
+	
 	 //===================begin - V put(key, value)===================
 	@Test
 	void StringcheckPutCollisionSameHashCode() {
